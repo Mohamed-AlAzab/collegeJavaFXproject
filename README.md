@@ -38,4 +38,4 @@ Led a team of 5 developers to design, develop, and deliver this comprehensive sy
 
 ## About the Project Lead
 
-This project was successfully led by [Mohamed AlAzab], overseeing a team of 5 developers, ensuring timely delivery, code quality, and effective collaboration throughout the development lifecycle.
+This project was successfully led by Mohamed AlAzab, overseeing a team of 5 developers, ensuring timely delivery, code quality, and effective collaboration throughout the development lifecycle.
