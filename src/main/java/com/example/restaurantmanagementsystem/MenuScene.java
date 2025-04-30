@@ -1,4 +1,4 @@
-package com.example.adv_proj;
+package com.example.restaurantmanagementsystem;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -18,7 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class App extends Application {
+public class MenuScene extends Application {
 
     Connection conn = null;
     PreparedStatement pst = null;
@@ -159,7 +159,7 @@ public class App extends Application {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         AddBtn.setOnAction(e -> {
-            conn = dbConnect.DBConnection();
+            conn = DB.dbConnection();
             String sql = "INSERT INTO menu (id, name, price, description) VALUES (?, ?, ?, ?)";
             try {
                 pst = conn.prepareStatement(sql);
@@ -205,7 +205,7 @@ public class App extends Application {
             }
 
             try {
-                conn = dbConnect.DBConnection();
+                conn = DB.dbConnection();
                 String sql = "UPDATE menu SET name = ? WHERE id = ?";
                 pst = conn.prepareStatement(sql);
                 pst.setString(1, tUname.getText());
@@ -248,7 +248,7 @@ public class App extends Application {
             }
 
         try {
-            conn = dbConnect.DBConnection();
+            conn = DB.dbConnection();
             String sql = "UPDATE menu SET price = ? WHERE id = ?";
 
                 pst = conn.prepareStatement(sql);
@@ -291,7 +291,7 @@ public class App extends Application {
                 return;
             }
             try {
-                conn = dbConnect.DBConnection();
+                conn = DB.dbConnection();
                 String sql = "UPDATE menu SET description = ? WHERE id = ?";
 
                 pst = conn.prepareStatement(sql);
@@ -320,7 +320,7 @@ public class App extends Application {
                 return;
             }
         try {
-            conn = dbConnect.DBConnection();
+            conn = DB.dbConnection();
             String sql = "UPDATE menu SET name=?,price = ?,description=? WHERE id = ?";
 
                 pst = conn.prepareStatement(sql);
@@ -345,7 +345,7 @@ public class App extends Application {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         DeleteBtn.setOnAction(e -> {
-            conn = dbConnect.DBConnection();
+            conn = DB.dbConnection();
             String sql = "DELETE FROM menu WHERE id = ?";
             try {
                 pst = conn.prepareStatement(sql);
@@ -430,7 +430,7 @@ public class App extends Application {
 
     public void show() throws SQLException {
         data = FXCollections.observableArrayList();
-        conn = dbConnect.DBConnection();
+        conn = DB.dbConnection();
 
         pst = conn.prepareStatement("SELECT * FROM menu");
         res = pst.executeQuery();
@@ -448,5 +448,3 @@ public class App extends Application {
         launch();
     }
 }
-
-
