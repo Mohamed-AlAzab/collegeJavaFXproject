@@ -7,10 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class CardComponent {
-    public static StackPane createCard(String imageUrl, String labelText, Stage stage) {
+    public static StackPane Card(String imageUrl, String labelText) {
         ImageView icon = new ImageView(new Image(imageUrl));
         icon.setFitWidth(50);
         icon.setFitHeight(50);

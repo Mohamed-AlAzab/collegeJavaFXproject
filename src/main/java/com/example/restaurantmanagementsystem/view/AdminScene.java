@@ -1,61 +1,61 @@
 package com.example.restaurantmanagementsystem.view;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
-import static com.example.restaurantmanagementsystem.view.component.CardComponent.createCard;
 
-public class AdminScene extends Application {
-    @Override
-    public void start(Stage stage) {
-        StackPane menuCard = createCard(
-                "https://cdn-icons-png.flaticon.com/512/2921/2921822.png",
-                "Menu",
-                stage
-        );
+import static com.example.restaurantmanagementsystem.view.component.CardComponent.Card;
 
-        StackPane card2 = createCard(
-                "https://cdn-icons-png.flaticon.com/512/1828/1828843.png",
-                "Favorite",
-                stage
-        );
+public class AdminScene {
+    Stage stage;
+    StackPane menuCard = Card(
+            "https://cdn-icons-png.flaticon.com/512/2921/2921822.png",
+            "Menu management"
+    );
+    StackPane employeeCard = Card(
+            "https://cdn-icons-png.flaticon.com/512/1828/1828843.png",
+            "Employee management"
+    );
+    StackPane reservationCard = Card(
+            "https://cdn-icons-png.flaticon.com/512/892/892781.png",
+            "Reservation management"
+    );
+    StackPane accountingCard = Card(
+            "https://cdn-icons-png.flaticon.com/512/892/892781.png",
+            "Accounting management"
+    );
 
-        StackPane card3 = createCard(
-                "https://cdn-icons-png.flaticon.com/512/892/892781.png",
-                "Profile",
-                stage
-        );
 
-        menuCard.setOnMouseClicked(event -> {
-            try {
-                new MenuScene().start(stage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    HBox cardRow = new HBox(20, menuCard, employeeCard, reservationCard, accountingCard);
+    StackPane root = new StackPane(cardRow);
 
-        HBox cardRow = new HBox(20, menuCard, card2, card3);
-        cardRow.setAlignment(Pos.CENTER);
-
-        StackPane root = new StackPane(cardRow);
-        root.setPadding(new Insets(30));
-        Scene mainScene = new Scene(root, 1100, 800, Color.web("#f0f0f0"));
-
-        stage.setTitle("Admin Screen");
-        stage.setScene(mainScene);
-        stage.show();
+    public AdminScene(Stage stage) {
+        this.stage = stage;
+        initControls();
+        initActions();
     }
 
-    public static void main(String[] args) {
-        launch();
+    public void initControls() {
+        cardRow.setAlignment(Pos.CENTER);
+    }
+
+    public void initActions() {
+        menuCard.setOnMouseClicked(event -> {
+            try {
+                new MenuScene().start(new Stage()); // Launches in a new window
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+        });
+    }
+
+    public Scene getScene() {
+        return new Scene(root, 1100, 850);
     }
 }
 // database username: restaurant

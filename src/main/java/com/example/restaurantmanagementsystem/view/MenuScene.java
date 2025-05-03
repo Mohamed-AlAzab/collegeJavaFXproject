@@ -61,7 +61,6 @@ public class MenuScene extends Application {
         gAdd.setAlignment(Pos.CENTER);
         gAdd.setPadding(new Insets(20));
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Button UpdateNameBtn = new Button("Update Name");
         Button UpdatePriceBtn = new Button("Update Price");
@@ -100,7 +99,6 @@ public class MenuScene extends Application {
         gUpdate.setAlignment(Pos.CENTER);
         gUpdate.setPadding(new Insets(20));
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Button DeleteItemButton = new Button("Delete Item");
         Text DeleteText = new Text("Delete Item by ID");
@@ -119,7 +117,6 @@ public class MenuScene extends Application {
         gDelete.setAlignment(Pos.CENTER);
         gDelete.setPadding(new Insets(20));
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -150,7 +147,6 @@ public class MenuScene extends Application {
             System.out.println(e.toString());
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         AddItemButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         AddText.setStyle("-fx-font: normal bold 20px 'solid'");
 
@@ -185,7 +181,7 @@ public class MenuScene extends Application {
                 showAlert(Alert.AlertType.ERROR, "Failed", "Something went wrong.");
             }
         });
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         UpdateNameBtn.setOnAction(e -> {
             if (tUid.getText().isEmpty() || tUname.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Name.");
@@ -228,7 +224,7 @@ public class MenuScene extends Application {
                 closeConnections();
             }
         });
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         UpdatePriceBtn.setOnAction(e -> {
             if (tUid.getText().isEmpty() || tUprice.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Price.");
@@ -270,7 +266,7 @@ public class MenuScene extends Application {
                 closeConnections();
             }
         });
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         UpdateDescBtn.setOnAction(e -> {
             if (tUid.getText().isEmpty() || tUdesc.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Description.");
@@ -312,7 +308,7 @@ public class MenuScene extends Application {
                 closeConnections();
             }
         });
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         UpdateAllBtn.setOnAction(e -> {
             if (tUid.getText().isEmpty()|| tUname.getText().isEmpty()|| tUprice.getText().isEmpty() || tUdesc.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please Enter All Item Details");
@@ -364,8 +360,7 @@ public class MenuScene extends Application {
         FlowPane rr = new FlowPane(v,gDelete);
         HBox root = new HBox(10, v,rr, vTable);
         root.setPadding(new Insets(20));
-        Scene scene = new Scene(root, 1100, 800);
-        // scene.getStylesheets().add("menu.css");
+        Scene scene = new Scene(root, 1100, 850);
         stage.setTitle("Menu Management");
         stage.setScene(scene);
         stage.show();
