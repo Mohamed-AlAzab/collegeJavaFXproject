@@ -1,30 +1,32 @@
 package com.example.restaurantmanagementsystem.model;
 
 public class KitchenAssistant extends Employee {
-    private int hoursWorked;
+    private double hoursWorked;
     private double hourlyRate;
 
-    public KitchenAssistant(int employeeId, String name, int hoursWorked, double hourlyRate) {
-        super(employeeId, name, 0);
+    public KitchenAssistant(int userId, String name, double hoursWorked, double hourlyRate, double tips, double discount, double bonus) {
+        super(userId, name, 0, tips, discount, bonus);
         this.hoursWorked = hoursWorked;
         this.hourlyRate = hourlyRate;
     }
-
     @Override
     public double calculateSalary() {
-        return hourlyRate * hoursWorked;
+        return (hoursWorked * hourlyRate) + this.tips + this.bonus - this.discount;
     }
-
     @Override
     public String getRole() {
         return "Kitchen Assistant";
     }
-
-    public int getHoursWorked() {
+    public double getHoursWorked() {
         return hoursWorked;
     }
-
+    public void setHoursWorked(double hoursWorked) {
+        this.hoursWorked = hoursWorked;
+    }
     public double getHourlyRate() {
         return hourlyRate;
+    }
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 }

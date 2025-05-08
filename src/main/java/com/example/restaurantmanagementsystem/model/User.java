@@ -1,14 +1,9 @@
 package com.example.restaurantmanagementsystem.model;
 
-import com.example.restaurantmanagementsystem.view.SignInScene;
-import javafx.scene.control.Alert;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
 public class User {
     private String email;
@@ -67,8 +62,61 @@ public class User {
             ps.setString(3, password);
             return ps.executeUpdate() == 1;
         } catch (Exception ex) {
-            System.out.println("Error adding menu item: " + ex.getMessage());
+            System.out.println("Error register user: " + ex.getMessage());
             return false;
         }
+    }
+
+    public static boolean loginUser(String email, String password) {
+        String sql = "SELECT * FROM USERS WHERE NAME = ? AND PASSWORD = ?";
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            return ps.executeUpdate() == 1;
+        } catch (Exception ex) {
+            System.out.println("Error login user: " + ex.getMessage());
+            return false;
+        }
+    }
+
+    public static void addToStaff(String email) {
+        String sql = "UPDATE USERS SET STAFF = 1 WHERE EMAIL = ?";
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            System.out.println("Error updating staff status: " + ex.getMessage());
+        }
+    }
+
+    public static void removeFromStaff(String email) {
+        String sql = "UPDATE USERS SET STAFF = 0 WHERE EMAIL = ?";
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            System.out.println("Error updating staff status: " + ex.getMessage());
+        }
+    }
+
+    public static int staff(String email){
+        String sql = "SELECT STAFF FROM USERS WHERE NAME = ?";
+        int staffValue = 0;
+        try (Connection conn=DB.dbConnection();
+             PreparedStatement pst=conn.prepareStatement(sql)) {
+            pst.setString(1,email);
+
+            try (ResultSet res = pst.executeQuery()) {
+                if (res.next()) {
+                    staffValue = res.getInt(1);
+                }
+            }
+        }catch (SQLException e){
+            System.out.println(e.toString());
+        }
+        return staffValue;
     }
 }

@@ -3,6 +3,7 @@ package com.example.restaurantmanagementsystem.view;
 import com.example.restaurantmanagementsystem.controller.MenuController;
 import com.example.restaurantmanagementsystem.model.DB;
 import com.example.restaurantmanagementsystem.model.Menu;
+import com.example.restaurantmanagementsystem.util.SceneSize;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -27,96 +29,101 @@ public class MenuScene extends Application {
     Connection conn = null;
     PreparedStatement pst = null;
     ResultSet res = null;
-    ObservableList<Menu> data;
+    ArrayList<Menu> data;
     TableView<Menu> table;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Button AddItemButton = new Button("Add Item");
+        Button addItemButton = new Button("Add Item");
         Text AddText = new Text("Add New Item");
-        Label lId = new Label("ID");
-        Label lName = new Label("Name");
-        Label lPrice = new Label("Price");
-        Label lDesc = new Label("Description");
+        Label idLabel = new Label("ID");
+        Label nameLabel = new Label("Name");
+        Label priceLabel = new Label("Price");
+        Label descriptionLabel = new Label("Description");
 
-        TextField tId = new TextField();
-        TextField tName = new TextField();
-        TextField tPrice = new TextField();
-        TextField tDesc = new TextField();
+        TextField idTextField = new TextField();
+        TextField nameTextField = new TextField();
+        TextField priceTextField = new TextField();
+        TextField descriptionTextField = new TextField();
 
         GridPane gAdd = new GridPane();
         gAdd.add(AddText, 0, 0, 2, 1);
-        gAdd.add(lId, 0, 1);
-        gAdd.add(tId, 1, 1);
-        gAdd.add(lName, 0, 2);
-        gAdd.add(tName, 1, 2);
-        gAdd.add(lPrice, 0, 3);
-        gAdd.add(tPrice, 1, 3);
-        gAdd.add(lDesc, 0, 4);
-        gAdd.add(tDesc, 1, 4);
-        gAdd.add(AddItemButton, 0, 5, 2, 1);
+        gAdd.add(idLabel, 0, 1);
+        gAdd.add(idTextField, 1, 1);
+        gAdd.add(nameLabel, 0, 2);
+        gAdd.add(nameTextField, 1, 2);
+        gAdd.add(priceLabel, 0, 3);
+        gAdd.add(priceTextField, 1, 3);
+        gAdd.add(descriptionLabel, 0, 4);
+        gAdd.add(descriptionTextField, 1, 4);
+        gAdd.add(addItemButton, 0, 5, 2, 1);
+
+        addItemButton.setMaxWidth(Double.MAX_VALUE);
 
         gAdd.setVgap(10);
         gAdd.setHgap(10);
         gAdd.setAlignment(Pos.CENTER);
         gAdd.setPadding(new Insets(20));
 
-
-        Button UpdateNameBtn = new Button("Update Name");
-        Button UpdatePriceBtn = new Button("Update Price");
-        Button UpdateDescBtn = new Button("Update Description");
-        Button UpdateAllBtn = new Button("Update all item details");
+        Button updateNameButton = new Button("Update Name");
+        Button updatePriceButton = new Button("Update Price");
+        Button updateDescriptionButton = new Button("Update Description");
+        Button updateAllButton = new Button("Update all item details");
 
         Text UpdateText = new Text("Update by ID");
-        Label lUid = new Label("ID");
-        Label lUname = new Label("New Name");
-        Label lUprice = new Label("New Price");
-        Label lUdesc = new Label("New Description");
+        Label idUpdateLabel = new Label("ID");
+        Label nameUpdateLabel = new Label("New Name");
+        Label priceUpdateLabel = new Label("New Price");
+        Label descriptionUpdateLabel = new Label("New Description");
 
-        TextField tUid = new TextField();
-        TextField tUname = new TextField();
-        TextField tUprice = new TextField();
-        TextField tUdesc = new TextField();
+        TextField idUpdateTextField = new TextField();
+        TextField nameUpdateTextField = new TextField();
+        TextField priceUpdateTextField = new TextField();
+        TextField descriptionUpdateTextField = new TextField();
 
         GridPane gUpdate = new GridPane();
         gUpdate.add(UpdateText, 0, 0, 2, 1);
-        gUpdate.add(lUid, 0, 1);
-        gUpdate.add(tUid, 1, 1);
-        gUpdate.add(lUname, 0, 2);
-        gUpdate.add(tUname, 1, 2);
-        gUpdate.add(lUprice, 0, 3);
-        gUpdate.add(tUprice, 1, 3);
-        gUpdate.add(lUdesc, 0, 4);
-        gUpdate.add(tUdesc, 1, 4);
+        gUpdate.add(idUpdateLabel, 0, 1);
+        gUpdate.add(idUpdateTextField, 1, 1);
+        gUpdate.add(nameUpdateLabel, 0, 2);
+        gUpdate.add(nameUpdateTextField, 1, 2);
+        gUpdate.add(priceUpdateLabel, 0, 3);
+        gUpdate.add(priceUpdateTextField, 1, 3);
+        gUpdate.add(descriptionUpdateLabel, 0, 4);
+        gUpdate.add(descriptionUpdateTextField, 1, 4);
 
-        gUpdate.add(UpdateNameBtn, 0, 5, 2, 1);
-        gUpdate.add(UpdatePriceBtn, 0, 6, 2, 1);
-        gUpdate.add(UpdateDescBtn, 0, 7, 2, 1);
-        gUpdate.add(UpdateAllBtn, 0, 8, 2, 2);
+        gUpdate.add(updateNameButton, 0, 5, 2, 1);
+        gUpdate.add(updatePriceButton, 0, 6, 2, 1);
+        gUpdate.add(updateDescriptionButton, 0, 7, 2, 1);
+        gUpdate.add(updateAllButton, 0, 8, 2, 2);
+
+        updateAllButton.setMaxWidth(Double.MAX_VALUE);
+        updateNameButton.setMaxWidth(Double.MAX_VALUE);
+        updateDescriptionButton.setMaxWidth(Double.MAX_VALUE);
+        updatePriceButton.setMaxWidth(Double.MAX_VALUE);
 
         gUpdate.setVgap(10);
         gUpdate.setHgap(10);
         gUpdate.setAlignment(Pos.CENTER);
         gUpdate.setPadding(new Insets(20));
 
-
         Button DeleteItemButton = new Button("Delete Item");
+        DeleteItemButton.setMaxWidth(Double.MAX_VALUE);
         Text DeleteText = new Text("Delete Item by ID");
         Label labelDeleteId = new Label("ID");
 
-        TextField tidd = new TextField();
+        TextField idDeleteTextField = new TextField();
 
         GridPane gDelete = new GridPane();
         gDelete.add(DeleteText, 0, 0, 2, 1);
         gDelete.add(labelDeleteId, 0, 1);
-        gDelete.add(tidd, 1, 1);
+        gDelete.add(idDeleteTextField, 1, 1);
         gDelete.add(DeleteItemButton, 0, 2, 2, 1);
 
         gDelete.setVgap(10);
         gDelete.setHgap(10);
         gDelete.setAlignment(Pos.CENTER);
         gDelete.setPadding(new Insets(20));
-
 
         table = new TableView<>();
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -147,32 +154,30 @@ public class MenuScene extends Application {
             System.out.println(e.toString());
         }
 
-        AddItemButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+        addItemButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         AddText.setStyle("-fx-font: normal bold 20px 'solid'");
-
-        UpdateNameBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        UpdatePriceBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        UpdateDescBtn.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        UpdateAllBtn.setStyle("-fx-background-color: orange; -fx-text-fill: black;");
+        updateNameButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+        updatePriceButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+        updateDescriptionButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
+        updateAllButton.setStyle("-fx-background-color: orange; -fx-text-fill: black;");
         UpdateText.setStyle("-fx-font: normal bold 20px 'solid'");
-
         DeleteItemButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         DeleteText.setStyle("-fx-font: normal bold 20px 'solid'");
 
         // Add Item in database
-        AddItemButton.setOnAction(e -> {
-            int id = Integer.parseInt(tId.getText());
-            String name = tName.getText();
-            double price = Double.parseDouble(tPrice.getText());
-            String description = tDesc.getText();
+        addItemButton.setOnAction(e -> {
+            int id = Integer.parseInt(idTextField.getText());
+            String name = nameTextField.getText();
+            double price = Double.parseDouble(priceTextField.getText());
+            String description = descriptionTextField.getText();
 
             if (MenuController.addItem(id, name, price, description)) {
                 try {
                     show();
-                    tId.setText("");
-                    tName.setText("");
-                    tPrice.setText("");
-                    tDesc.setText("");
+                    idTextField.setText("");
+                    nameTextField.setText("");
+                    priceTextField.setText("");
+                    descriptionTextField.setText("");
                 } catch (Exception ex) {
                     System.out.println(ex.toString());
                 }
@@ -182,23 +187,20 @@ public class MenuScene extends Application {
             }
         });
 
-        UpdateNameBtn.setOnAction(e -> {
-            if (tUid.getText().isEmpty() || tUname.getText().isEmpty()) {
+        updateNameButton.setOnAction(e -> {
+            if (idUpdateTextField.getText().isEmpty() || nameUpdateTextField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Name.");
                 return;
             }
-
-            if (isEmpty(tUid, tUname)) {
+            if (isEmpty(idUpdateTextField, nameUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and Name.");
                 return;
             }
-
-            if (!isInteger(tUid)) {
+            if (!isValidNumber(idUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "ID must be a number.");
                 return;
             }
-
-            if (!isValidString(tUname)) {
+            if (!isValidString(nameUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Name", "Name must contain letters, not just numbers.");
                 return;
             }
@@ -207,8 +209,8 @@ public class MenuScene extends Application {
                 conn = DB.dbConnection();
                 String sql = "UPDATE menu SET name = ? WHERE id = ?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tUname.getText());
-                pst.setInt(2, Integer.parseInt(tUid.getText()));
+                pst.setString(1, nameUpdateTextField.getText());
+                pst.setInt(2, Integer.parseInt(idUpdateTextField.getText()));
                 int j = pst.executeUpdate();
                 if (j == 1) {
                     showAlert(Alert.AlertType.INFORMATION, "Success", "Name Updated Successfully!");
@@ -216,31 +218,29 @@ public class MenuScene extends Application {
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Failed", "ID may be wrong.");
                 }
+                pst.close();
+                conn.close();
             } catch (NumberFormatException ex) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "ID must be a number.");
             } catch (Exception ex) {
                 showAlert(Alert.AlertType.ERROR, "Error", ex.getMessage());
-            } finally {
-                closeConnections();
             }
         });
 
-        UpdatePriceBtn.setOnAction(e -> {
-            if (tUid.getText().isEmpty() || tUprice.getText().isEmpty()) {
+        updatePriceButton.setOnAction(e -> {
+            if (idUpdateTextField.getText().isEmpty() || priceUpdateTextField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Price.");
                 return;
             }
-
-            if (isEmpty(tUid, tUprice)) {
+            if (isEmpty(idUpdateTextField, priceUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and Price.");
                 return;
             }
-
-            if (!isInteger(tUid)) {
+            if (!isValidNumber(idUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "ID must be a number.");
                 return;
             }
-            if (!isValidNumber(tUprice)) {
+            if (!isValidNumber(priceUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "Price must be a valid number.");
                 return;
             }
@@ -250,8 +250,8 @@ public class MenuScene extends Application {
             String sql = "UPDATE menu SET price = ? WHERE id = ?";
 
                 pst = conn.prepareStatement(sql);
-                pst.setDouble(1, Double.parseDouble(tUprice.getText()));
-                pst.setInt(2, Integer.parseInt(tUid.getText()));
+                pst.setDouble(1, Double.parseDouble(priceUpdateTextField.getText()));
+                pst.setInt(2, Integer.parseInt(idUpdateTextField.getText()));
 
                 int j = pst.executeUpdate();
                 if (j == 1) {
@@ -260,30 +260,27 @@ public class MenuScene extends Application {
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Failed", "ID may be wrong.");
                 }
+                pst.close();
+                conn.close();
             } catch (Exception ex) {
                 showAlert(Alert.AlertType.ERROR, "Error", ex.getMessage());
-            } finally {
-                closeConnections();
             }
         });
 
-        UpdateDescBtn.setOnAction(e -> {
-            if (tUid.getText().isEmpty() || tUdesc.getText().isEmpty()) {
+        updateDescriptionButton.setOnAction(e -> {
+            if (idUpdateTextField.getText().isEmpty() || descriptionUpdateTextField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and New Description.");
                 return;
             }
-
-            if (isEmpty(tUid, tUdesc)) {
+            if (isEmpty(idUpdateTextField, descriptionUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please enter both ID and Description.");
                 return;
             }
-
-            if (!isInteger(tUid)) {
+            if (!isValidNumber(idUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Input", "ID must be a number.");
                 return;
             }
-
-            if (!isValidString(tUdesc)) {
+            if (!isValidString(descriptionUpdateTextField)) {
                 showAlert(Alert.AlertType.ERROR, "Invalid Description", "Description must contain letters, not just numbers.");
                 return;
             }
@@ -292,8 +289,8 @@ public class MenuScene extends Application {
                 String sql = "UPDATE menu SET description = ? WHERE id = ?";
 
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tUdesc.getText());
-                pst.setInt(2, Integer.parseInt(tUid.getText()));
+                pst.setString(1, descriptionUpdateTextField.getText());
+                pst.setInt(2, Integer.parseInt(idUpdateTextField.getText()));
 
                 int j = pst.executeUpdate();
                 if (j == 1) {
@@ -302,27 +299,26 @@ public class MenuScene extends Application {
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Failed", "ID may be wrong.");
                 }
+                pst.close();
+                conn.close();
             } catch (Exception ex) {
                 showAlert(Alert.AlertType.ERROR, "Error", ex.getMessage());
-            } finally {
-                closeConnections();
             }
         });
 
-        UpdateAllBtn.setOnAction(e -> {
-            if (tUid.getText().isEmpty()|| tUname.getText().isEmpty()|| tUprice.getText().isEmpty() || tUdesc.getText().isEmpty()) {
+        updateAllButton.setOnAction(e -> {
+            if (idUpdateTextField.getText().isEmpty()|| nameUpdateTextField.getText().isEmpty()|| priceUpdateTextField.getText().isEmpty() || descriptionUpdateTextField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Input Error", "Please Enter All Item Details");
                 return;
             }
-        try {
-            conn = DB.dbConnection();
-            String sql = "UPDATE menu SET name=?,price = ?,description=? WHERE id = ?";
-
+            try {
+                conn = DB.dbConnection();
+                String sql = "UPDATE menu SET name=?,price = ?,description=? WHERE id = ?";
                 pst = conn.prepareStatement(sql);
-                pst.setString(1, tUname.getText());
-                pst.setDouble(2, Double.parseDouble(tUprice.getText()));
-                pst.setString(3, tUdesc.getText());
-                pst.setInt(4, Integer.parseInt(tUid.getText()));
+                pst.setString(1, nameUpdateTextField.getText());
+                pst.setDouble(2, Double.parseDouble(priceUpdateTextField.getText()));
+                pst.setString(3, descriptionUpdateTextField.getText());
+                pst.setInt(4, Integer.parseInt(idUpdateTextField.getText()));
 
                 int j = pst.executeUpdate();
                 if (j == 1) {
@@ -331,19 +327,19 @@ public class MenuScene extends Application {
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Failed", "ID may be wrong.");
                 }
+                pst.close();
+                conn.close();
             } catch (Exception ex) {
                 showAlert(Alert.AlertType.ERROR, "Error", ex.getMessage());
-            } finally {
-                closeConnections();
             }
         });
         // Delete Item from database
         DeleteItemButton.setOnAction(e -> {
-            int id = Integer.parseInt(tidd.getText());
+            int id = Integer.parseInt(idDeleteTextField.getText());
             if (MenuController.deleteItem(id)) {
                 try {
                     show();
-                    tidd.setText("");
+                    idDeleteTextField.setText("");
                 } catch (Exception ex) {
                     System.out.println(ex.toString());
                 }
@@ -353,30 +349,21 @@ public class MenuScene extends Application {
             }
         });
 
-
         VBox v = new VBox(20, gAdd, gUpdate);
         v.setPadding(new Insets(20));
         v.setAlignment(Pos.TOP_CENTER);
         FlowPane rr = new FlowPane(v,gDelete);
         HBox root = new HBox(10, v,rr, vTable);
         root.setPadding(new Insets(20));
-        Scene scene = new Scene(root, 1100, 850);
+        Scene scene = new Scene(root, SceneSize.width,SceneSize.height);
         stage.setTitle("Menu Management");
         stage.setScene(scene);
         stage.show();
     }
 
-    private void closeConnections() {
-        try { if (pst != null) pst.close(); } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        try { if (conn != null) conn.close(); } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-    }
-
     private boolean isValidNumber(TextField field) {
         try {
+            Integer.parseInt(field.getText().trim());
             Integer.parseInt(field.getText().trim());
             return true;
         } catch (NumberFormatException e) {
@@ -398,22 +385,11 @@ public class MenuScene extends Application {
         return false;
     }
 
-    private boolean isInteger(TextField field) {
-        try {
-            Integer.parseInt(field.getText().trim());
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     public void show() throws SQLException {
-        data = FXCollections.observableArrayList();
+        data = new ArrayList<>();
         conn = DB.dbConnection();
-
         pst = conn.prepareStatement("SELECT * FROM menu");
         res = pst.executeQuery();
-
         while (res.next()) {
             Menu menu =
                 new Menu(
@@ -426,7 +402,8 @@ public class MenuScene extends Application {
         }
         pst.close();
         conn.close();
-        table.setItems(data);
+        // function make the array list to normal array make sort or make search
+        table.getItems().setAll(data);
     }
 
     public static void main(String[] args) {

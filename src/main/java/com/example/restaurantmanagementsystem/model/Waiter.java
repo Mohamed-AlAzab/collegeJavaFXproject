@@ -1,20 +1,18 @@
 package com.example.restaurantmanagementsystem.model;
 
 public class Waiter extends Employee {
-    private int hoursWorked;
     private double hourlyRate;
-    private double tips;
+    private double hoursWorked;
 
-    public Waiter(int employeeId, String name, double tips, double hourlyRate, int hoursWorked) {
-        super(employeeId, name, 0);
-        this.hoursWorked = hoursWorked;
+    public Waiter(int userId, String name, double tips, double hourlyRate, double hoursWorked, double discount, double bonus) {
+        super(userId, name, 0, tips, discount, bonus);
         this.hourlyRate = hourlyRate;
-        this.tips = tips;
+        this.hoursWorked = hoursWorked;
     }
 
     @Override
     public double calculateSalary() {
-        return hourlyRate * hoursWorked + tips;
+        return (hourlyRate * hoursWorked) + this.tips + this.bonus - this.discount;
     }
 
     @Override
@@ -22,15 +20,19 @@ public class Waiter extends Employee {
         return "Waiter";
     }
 
-    public int getHoursWorked() {
-        return hoursWorked;
-    }
-
     public double getHourlyRate() {
         return hourlyRate;
     }
 
-    public double getTips() {
-        return tips;
+    public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
+    }
+
+    public double getHoursWorked() {
+        return hoursWorked;
+    }
+
+    public void setHoursWorked(double hoursWorked) {
+        this.hoursWorked = hoursWorked;
     }
 }

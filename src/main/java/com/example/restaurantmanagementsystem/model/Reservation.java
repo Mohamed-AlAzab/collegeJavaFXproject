@@ -3,22 +3,22 @@ package com.example.restaurantmanagementsystem.model;
 import java.time.LocalDate;
 
 public class Reservation {
-    private int tableId;
+    private int id;
     private String customerName;
     private LocalDate date;
 
-    public Reservation(int tableId, String customerName, LocalDate date) {
-        this.tableId = tableId;
+    public Reservation(int id, String customerName, LocalDate date) {
+        this.id = id;
         this.customerName = customerName;
         this.date = date;
     }
 
-    public int getTableId() {
-        return this.tableId;
+    public int getId() {
+        return this.id;
     }
 
-    public void setTableId(int tableId) {
-        this.tableId = tableId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCustomerName() {

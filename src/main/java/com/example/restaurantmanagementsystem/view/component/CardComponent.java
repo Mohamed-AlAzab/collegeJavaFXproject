@@ -8,9 +8,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.File;
+
 public class CardComponent {
-    public static StackPane Card(String imageUrl, String labelText) {
-        ImageView icon = new ImageView(new Image(imageUrl));
+    public static StackPane Card(String imagePathOrUrl, String labelText) {
+        Image image;
+
+        File file = new File(imagePathOrUrl);
+        if (file.exists()) {
+            image = new Image(file.toURI().toString());
+        } else {
+            // Fallback to URL (or resource)
+            image = new Image(imagePathOrUrl);
+        }
+
+        ImageView icon = new ImageView(image);
         icon.setFitWidth(50);
         icon.setFitHeight(50);
 

@@ -5,176 +5,265 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static com.example.restaurantmanagementsystem.controller.EmployeeController.getEmail;
+import static com.example.restaurantmanagementsystem.controller.UserController.*;
+
 public class EmployeeManager {
     private Stack<Operation> operationHistory = new Stack<>();
     private List<Employee> initialState = new ArrayList<>();
 
     public EmployeeManager() {
-        initialState.addAll(getAllEmployeesFromDB());
+        initialState.addAll(fetchAllEmployees());
     }
 
-    public void addEmployee(Employee e) {
-        String sql = "INSERT INTO employees (employeeId, name, role, salary, discount, bonus, hoursWorked, hourlyRate, tips, ordersDelivered, payPerOrder) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void addEmployee(Employee employee) {
+        String sql = "INSERT INTO EMPLOYEES (name, role, salary, discount, bonus, hoursWorked, hourlyRate, tips, ordersDelivered, payPerOrder, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection conn = DB.dbConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, e.getEmployeeId());
-            pstmt.setString(2, e.getName());
-            pstmt.setString(3, e.getRole());
-            pstmt.setDouble(4, e instanceof Chef || e instanceof Manager ? e.salary : 0);
+             PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            if (e instanceof Chef) {
-                pstmt.setDouble(5, ((Chef) e).getDiscount());
-                pstmt.setDouble(6, 0);
-                pstmt.setInt(7, 0);
-                pstmt.setDouble(8, 0);
-                pstmt.setDouble(9, 0);
-                pstmt.setInt(10, 0);
-                pstmt.setDouble(11, 0);
-            } else if (e instanceof Manager) {
-                pstmt.setDouble(5, 0);
-                pstmt.setDouble(6, ((Manager) e).getBonus());
-                pstmt.setInt(7, 0);
-                pstmt.setDouble(8, 0);
-                pstmt.setDouble(9, 0);
-                pstmt.setInt(10, 0);
-                pstmt.setDouble(11, 0);
-            } else if (e instanceof Waiter) {
-                pstmt.setDouble(5, 0);
-                pstmt.setDouble(6, 0);
-                pstmt.setInt(7, ((Waiter) e).getHoursWorked());
-                pstmt.setDouble(8, ((Waiter) e).getHourlyRate());
-                pstmt.setDouble(9, ((Waiter) e).getTips());
-                pstmt.setInt(10, 0);
-                pstmt.setDouble(11, 0);
-            } else if (e instanceof Delivery) {
-                pstmt.setDouble(5, 0);
-                pstmt.setDouble(6, 0);
-                pstmt.setInt(7, 0);
-                pstmt.setDouble(8, 0);
-                pstmt.setDouble(9, 0);
-                pstmt.setInt(10, ((Delivery) e).getOrdersDelivered());
-                pstmt.setDouble(11, ((Delivery) e).getPayPerOrder());
-            } else if (e instanceof KitchenAssistant) {
-                pstmt.setDouble(5, 0);
-                pstmt.setDouble(6, 0);
-                pstmt.setInt(7, ((KitchenAssistant) e).getHoursWorked());
-                pstmt.setDouble(8, ((KitchenAssistant) e).getHourlyRate());
-                pstmt.setDouble(9, 0);
-                pstmt.setInt(10, 0);
-                pstmt.setDouble(11, 0);
-            } else {
-                pstmt.setDouble(5, 0);
-                pstmt.setDouble(6, 0);
-                pstmt.setInt(7, 0);
-                pstmt.setDouble(8, 0);
-                pstmt.setDouble(9, 0);
-                pstmt.setInt(10, 0);
-                pstmt.setDouble(11, 0);
+            pst.setString(1, employee.getName());
+            pst.setString(2, employee.getRole());
+            pst.setDouble(3, employee.getSalary());
+            pst.setDouble(4, employee.getDiscount());
+            pst.setDouble(5, employee.getBonus());
+
+            switch (employee) {
+                case Manager manager ->{
+                    pst.setNull(6, Types.DOUBLE);
+                    pst.setNull(7, Types.DOUBLE);
+                    pst.setNull(8, Types.DOUBLE);
+                    pst.setNull(9, Types.INTEGER);
+                    pst.setNull(10, Types.DOUBLE);
+                }
+                case Chef chef->{
+                    pst.setNull(6, Types.DOUBLE);
+                    pst.setNull(7, Types.DOUBLE);
+                    pst.setNull(8, Types.DOUBLE);
+                    pst.setNull(9, Types.INTEGER);
+                    pst.setNull(10, Types.DOUBLE);
+                }
+                case Waiter waiter -> {
+                    pst.setDouble(6, ((Waiter) employee).getHoursWorked());
+                    pst.setDouble(7, ((Waiter) employee).getHourlyRate());
+                    pst.setDouble(8, employee.getTips());
+                    pst.setNull(9, Types.INTEGER);
+                    pst.setNull(10, Types.DOUBLE);
+                }
+                case Delivery delivery -> {
+                    pst.setNull(6, Types.DOUBLE);
+                    pst.setNull(7, Types.DOUBLE);
+                    pst.setDouble(8, employee.getTips());
+                    pst.setInt(9, ((Delivery) employee).getOrdersDelivered());
+                    pst.setDouble(10, ((Delivery) employee).getPayPerOrder());
+                }
+                case KitchenAssistant assistant -> {
+                    pst.setDouble(6, ((KitchenAssistant) employee).getHoursWorked());
+                    pst.setDouble(7, ((KitchenAssistant) employee).getHourlyRate());
+                    pst.setDouble(8, employee.getTips());
+                    pst.setNull(9, Types.INTEGER);
+                    pst.setNull(10, Types.DOUBLE);
+                }
+                default -> {
+                    pst.setNull(6, Types.DOUBLE);
+                    pst.setNull(7, Types.DOUBLE);
+                    pst.setDouble(8, employee.getTips());
+                    pst.setNull(9, Types.INTEGER);
+                    pst.setNull(10, Types.DOUBLE);
+                }
             }
 
-            pstmt.executeUpdate();
-            operationHistory.push(new Operation("ADD", e));
+            pst.setInt(11, employee.getUserId());
+            pst.executeUpdate();
+            addToStaff(getEmail(employee.getUserId()));
+            operationHistory.push(new Operation("ADD", employee, getEmail(employee.getUserId())));
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println(ex.toString());
         }
     }
 
-    public void removeEmployee(int employeeId) {
-        Employee employeeToRemove = null;
-        for (Employee e : getAllEmployees()) {
-            if (e.getEmployeeId() == employeeId) {
-                employeeToRemove = e;
-                break;
-            }
-        }
+    public void removeEmployee(int id) {
+        Employee employeeToRemove = fetchAllEmployees().stream()
+                .filter(e -> e.getId() == id)
+                .findFirst()
+                .orElse(null);
 
         if (employeeToRemove != null) {
-            String sql = "DELETE FROM employees WHERE employeeId = ?";
+            String sql = "DELETE FROM employees WHERE id = ?";
             try (Connection conn = DB.dbConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, employeeId);
-                pstmt.executeUpdate();
-                operationHistory.push(new Operation("DELETE", employeeToRemove));
+                 PreparedStatement pst = conn.prepareStatement(sql)) {
+                pst.setInt(1, id);
+                pst.executeUpdate();
+                removeFromStaff(getEmail(id));
+                operationHistory.push(new Operation("DELETE", employeeToRemove, getEmail(employeeToRemove.getId())));
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
         }
     }
 
-    public List<Employee> getAllEmployees() {
-        return getAllEmployeesFromDB();
+    public void updateEmployee(Employee employee, String oldEmail) {
+        Employee originalEmployee = fetchAllEmployees().stream()
+                .filter(e -> e.getId() == employee.getId())
+                .findFirst()
+                .orElse(null);
+        if (originalEmployee == null) {
+            return;
+        }
+        String sql = "UPDATE employees SET name = ?, role = ?, salary = ?, tips = ?, discount = ?, bonus = ?, hoursWorked = ?, hourlyRate = ?, ordersDelivered = ?, payPerOrder = ?, user_Id = ? WHERE id = ?";
+
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, employee.getName());
+            pst.setString(2, employee.getRole());
+            pst.setDouble(3, employee.getSalary());
+            pst.setDouble(4, employee.getTips());
+            pst.setDouble(5, employee.getDiscount());
+            pst.setDouble(6, employee.getBonus());
+
+            if (employee instanceof Waiter waiter) {
+                pst.setDouble(7, waiter.getHoursWorked());
+                pst.setDouble(8, waiter.getHourlyRate());
+                pst.setNull(9, Types.INTEGER);
+                pst.setNull(10, Types.DOUBLE);
+            } else if (employee instanceof Delivery delivery) {
+                pst.setNull(7, Types.INTEGER);
+                pst.setNull(8, Types.DOUBLE);
+                pst.setInt(9, delivery.getOrdersDelivered());
+                pst.setDouble(10, delivery.getPayPerOrder());
+            } else if (employee instanceof KitchenAssistant assistant) {
+                pst.setDouble(7, assistant.getHoursWorked());
+                pst.setDouble(8, assistant.getHourlyRate());
+                pst.setNull(9, Types.INTEGER);
+                pst.setNull(10, Types.DOUBLE);
+            } else {
+                pst.setNull(7, Types.INTEGER);
+                pst.setNull(8, Types.DOUBLE);
+                pst.setNull(9, Types.INTEGER);
+                pst.setNull(10, Types.DOUBLE);
+            }
+
+            pst.setInt(11, employee.getUserId());
+            pst.setInt(12, employee.getId());
+            pst.executeUpdate();
+
+            if(!getEmail(employee.getUserId()).equals(oldEmail)){
+                System.out.println("Old Email: " + oldEmail);
+                addToStaff(getEmail(employee.getUserId()));
+                removeFromStaff(oldEmail);
+            }
+
+            operationHistory.push(new Operation("UPDATE", originalEmployee, getEmail(employee.getUserId())));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    private List<Employee> getAllEmployeesFromDB() {
+    public List<Employee> fetchAllEmployees() {
         List<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM employees";
+
         try (Connection conn = DB.dbConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
-                int employeeId = rs.getInt("employeeId");
-                String name = rs.getString("name");
-                String role = rs.getString("role");
-
-                Employee employee = null;
-                if (role.equals("Chef")) {
-                    double salary = rs.getDouble("salary");
-                    double discount = rs.getDouble("discount");
-                    employee = new Chef(employeeId, name, salary, discount);
-                } else if (role.equals("Manager")) {
-                    double salary = rs.getDouble("salary");
-                    double bonus = rs.getDouble("bonus");
-                    employee = new Manager(employeeId, name, salary, bonus);
-                } else if (role.equals("Waiter")) {
-                    int hoursWorked = rs.getInt("hoursWorked");
-                    double hourlyRate = rs.getDouble("hourlyRate");
-                    double tips = rs.getDouble("tips");
-                    employee = new Waiter(employeeId, name, tips, hourlyRate, hoursWorked);
-                } else if (role.equals("Delivery Person")) {
-                    int ordersDelivered = rs.getInt("ordersDelivered");
-                    double payPerOrder = rs.getDouble("payPerOrder");
-                    employee = new Delivery(employeeId, name, ordersDelivered, payPerOrder);
-                } else if (role.equals("Kitchen Assistant")) {
-                    int hoursWorked = rs.getInt("hoursWorked");
-                    double hourlyRate = rs.getDouble("hourlyRate");
-                    employee = new KitchenAssistant(employeeId, name, hoursWorked, hourlyRate);
-                }
-
+                Employee employee = createEmployeeFromResultSet(rs);
                 if (employee != null) {
                     employees.add(employee);
                 }
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println(ex.toString());
         }
         return employees;
     }
 
-    public void undoLastOperation() {
-        if (operationHistory.isEmpty()) {
-            return;
-        }
+    private Employee createEmployeeFromResultSet(ResultSet rs) throws SQLException {
+        int employeeId = rs.getInt("id");
+        int userId = rs.getInt("user_id");
+        String name = rs.getString("name");
+        String role = rs.getString("role");
+        double salary = rs.getDouble("salary");
+        double tips = rs.getDouble("tips");
+        double discount = rs.getDouble("discount");
+        double bonus = rs.getDouble("bonus");
 
-        Operation lastOp = operationHistory.pop();
-        if (lastOp.getType().equals("ADD")) {
-            removeEmployee(lastOp.getEmployee().getEmployeeId());
-        } else if (lastOp.getType().equals("DELETE")) {
-            addEmployee(lastOp.getEmployee());
+        Employee employee = switch (role) {
+            case "Chef" -> new Chef(userId, name, salary, discount, bonus);
+            case "Manager" -> new Manager(userId, name, salary, discount, bonus);
+            case "Waiter" -> new Waiter(
+                    userId, name, tips, rs.getDouble("hourlyRate"),
+                    rs.getDouble("hoursWorked"), discount, bonus
+            );
+            case "Delivery Person" -> new Delivery(
+                    userId, name, rs.getInt("ordersDelivered"),
+                    rs.getDouble("payPerOrder"), tips, discount, bonus
+            );
+            case "Kitchen Assistant" -> new KitchenAssistant(
+                    userId, name, rs.getDouble("hoursWorked"),
+                    rs.getDouble("hourlyRate"), tips, discount, bonus
+            );
+            default -> null;
+        };
+
+        if (employee != null) {
+            employee.setId(employeeId);
+        }
+        return employee;
+    }
+
+    public void undoLastOperation() {
+        if (!operationHistory.isEmpty()) {
+            Operation lastOp = operationHistory.pop();
+            if (lastOp.getType().equals("ADD")) {
+                removeEmployee(lastOp.getEmployee().getId());
+            } else if (lastOp.getType().equals("DELETE")) {
+                addEmployee(lastOp.getEmployee());
+            } else if (lastOp.getType().equals("UPDATE")) {
+                updateEmployee(lastOp.getEmployee(), lastOp.getOldEmail());
+            }
         }
     }
 
     public void resetToInitialState() {
+        clearDatabase();
+        initialState.forEach(this::addEmployee);
+        operationHistory.clear();
+    }
+
+    private void clearDatabase() {
         String deleteSql = "DELETE FROM employees";
         try (Connection conn = DB.dbConnection();
-             PreparedStatement pstmt = conn.prepareStatement(deleteSql)) {
-            pstmt.executeUpdate();
+             PreparedStatement pst = conn.prepareStatement(deleteSql)) {
+            pst.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            System.out.println(ex.toString());
         }
-        for (Employee e : initialState) {
-            addEmployee(e);
+    }
+
+    private static class Operation {
+        private final String type;
+        private final Employee employee;
+        private final String oldEmail;
+
+        public Operation(String type, Employee employee, String oldEmail) {
+            this.type = type;
+            this.employee = employee;
+            this.oldEmail = oldEmail;
         }
-        operationHistory.clear();
+
+        public String getOldEmail() {
+            return oldEmail;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public Employee getEmployee() {
+            return employee;
+        }
     }
 }

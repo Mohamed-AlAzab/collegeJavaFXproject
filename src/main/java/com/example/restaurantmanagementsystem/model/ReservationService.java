@@ -3,7 +3,7 @@ package com.example.restaurantmanagementsystem.model;
 import java.time.LocalDate;
 
 public interface ReservationService {
-    int[] makeReservation(int var1, String var2, LocalDate var3);
+    int[] makeReservation(int id, String customerName, LocalDate date);
 
-    int[] cancelReservation(int var1);
+    int[] cancelReservation(int id);
 }

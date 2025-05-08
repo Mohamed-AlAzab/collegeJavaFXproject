@@ -4,6 +4,9 @@ import javafx.scene.control.Alert;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -54,6 +57,8 @@ public class Menu {
         this.description = desc;
     }
 
+    // abstract public void displayDetails();
+
     public static boolean addItem(int id, String name, double price, String description) {
         String sql = "INSERT INTO menu (id, name, price, description) VALUES (?, ?, ?, ?)";
 
@@ -85,5 +90,21 @@ public class Menu {
             showAlert(Alert.AlertType.ERROR, "Error", ex.getMessage());
             return false;
         }
+    }
+
+    public static ArrayList<Menu>fetchAllData(){
+        Connection connection=DB.dbConnection();
+        String sql="select * from MENU";
+        ArrayList<Menu>data=new ArrayList<>();
+        try{
+            PreparedStatement pst=connection.prepareStatement(sql);
+            ResultSet res= pst.executeQuery();
+            while (res.next()){
+                data.add(new Menu(res.getInt(1),res.getString(2),res.getDouble(3),res.getString(4)));
+            }
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return data;
     }
 }

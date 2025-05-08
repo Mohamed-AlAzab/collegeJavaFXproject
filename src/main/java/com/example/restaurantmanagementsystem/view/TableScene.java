@@ -2,6 +2,7 @@ package com.example.restaurantmanagementsystem.view;
 
 import com.example.restaurantmanagementsystem.model.DB;
 import com.example.restaurantmanagementsystem.model.Table;
+import com.example.restaurantmanagementsystem.util.SceneSize;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,7 +45,7 @@ public class TableScene {
         pst = conn.prepareStatement("Select * from TABLES");
         res = pst.executeQuery();
         while(res.next()) {
-            data.add(new Table(res.getString(1), res.getInt(2), res.getInt(3), res.getInt(4)));
+            data.add(new Table(res.getInt(1), res.getString(2), res.getInt(3), res.getInt(4)));
         }
         pst.close();
         conn.close();
@@ -54,26 +55,26 @@ public class TableScene {
     public void initControls() {
         root.add(this.backButton, 0, 0);
         root.setPadding(new Insets(20));
-        root.setHgap((double)10.0F);
-        root.setVgap((double)10.0F);
+        root.setHgap(10);
+        root.setVgap(10);
         root.setAlignment(Pos.CENTER_RIGHT);
         table.setPlaceholder(new Label("No rows to display"));
-        TableColumn<Table, String> c1 = new TableColumn<>("Type");
-        c1.setCellValueFactory(new PropertyValueFactory<>("type"));
-        TableColumn<Table, Integer> c2 = new TableColumn<>("TableID");
-        c2.setCellValueFactory(new PropertyValueFactory<>("tableID"));
+        TableColumn<Table, Integer> c1 = new TableColumn<>("TableID");
+        c1.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Table, String> c2 = new TableColumn<>("Type");
+        c2.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumn<Table, Integer> c3 = new TableColumn<>("Capacity");
         c3.setCellValueFactory(new PropertyValueFactory<>("capacity"));
         TableColumn<Table, Integer> c4 = new TableColumn<>("IsReserved");
         c4.setCellValueFactory(new PropertyValueFactory<>("isReserved"));
         table.getColumns().addAll(c1, c2, c3, c4);
-        c1.setPrefWidth((double)150.0F);
-        c2.setPrefWidth((double)150.0F);
-        c3.setPrefWidth((double)150.0F);
-        c4.setPrefWidth((double)150.0F);
+        c1.setPrefWidth(150);
+        c2.setPrefWidth(150);
+        c3.setPrefWidth(150);
+        c4.setPrefWidth(150);
 
         try {
-            this.show();
+            show();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -84,11 +85,11 @@ public class TableScene {
 
     public void initActions() {
         backButton.setOnAction((e) ->{
-            stage.setScene((new TableScene(stage)).getScene());
+            stage.setScene((new ReservationScene(stage)).getScene());
         });
     }
 
     public Scene getScene() {
-        return new Scene(v3, 1100, 850);
+        return new Scene(v3, SceneSize.width,SceneSize.height);
     }
 }
