@@ -17,6 +17,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.controller.TableController.*;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -47,15 +49,19 @@ public class AdminTableScene extends Application {
         tableList = FXCollections.observableArrayList(tableManager.fetchAllTable());
         tables.setItems(tableList);
 
-        // Buttons
-        Button addButton = createStyledButton("Add Table", "#2196F3");
-        Button deleteButton = createStyledButton("Delete Table", "#F44336");
-        Button updateButton = createStyledButton("Update Table", "#FF9800");
+        Button addButton = new Button("Add Table");
+        addButton.setPrefWidth(150);
 
-        VBox buttonBox = new VBox(10, addButton, deleteButton, updateButton);
+        Button deleteButton = new Button("Delete Table");
+        deleteButton.setPrefWidth(150);
+        deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+
+        Button updateButton = new Button("Update Table");
+        updateButton.setPrefWidth(150);
+
+        VBox buttonBox = new VBox(10, addButton, updateButton, deleteButton);
         buttonBox.setAlignment(Pos.CENTER_LEFT);
         buttonBox.setPadding(new Insets(10));
-        buttonBox.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-width: 1px;");
 
         StackPane tablePane = new StackPane(tables);
         tablePane.setPadding(new Insets(10));
@@ -98,6 +104,7 @@ public class AdminTableScene extends Application {
         Scene scene = new Scene(root, SceneSize.width, SceneSize.height);
         primaryStage.setTitle("Table Management");
         primaryStage.setScene(scene);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
         primaryStage.setResizable(true);
         primaryStage.show();
     }
@@ -147,7 +154,9 @@ public class AdminTableScene extends Application {
             }
             return null;
         });
-
+        dialog.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm()
+        );
         return dialog;
     }
 
@@ -198,16 +207,10 @@ public class AdminTableScene extends Application {
             }
             return null;
         });
-
+        dialog.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm()
+        );
         return dialog;
-    }
-
-    private Button createStyledButton(String text, String color) {
-        Button button = new Button(text);
-        button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white;");
-        button.setPrefWidth(120);
-        button.setPrefHeight(40);
-        return button;
     }
 
     public static void main(String[] args) {

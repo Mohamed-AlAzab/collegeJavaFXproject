@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -112,5 +113,9 @@ public class CancelOrderScene {
         }
     }
 
-    public Scene getScene() { return new Scene(gridPane, SceneSize.width, SceneSize.height); }
+    public Scene getScene() {
+        Scene scene=new Scene(gridPane, SceneSize.width, SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
+    }
 }

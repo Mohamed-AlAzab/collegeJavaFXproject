@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -143,15 +144,17 @@ public class CancelReservationScene {
 
     private ArrayList<Reservation> linearSearchByName(String name) {
         ArrayList<Reservation> results = new ArrayList<>();
-        for (Reservation r : data) {
-            if (r.getCustomerName().equalsIgnoreCase(name.trim())) {
-                results.add(r);
+        for (Reservation reservation : data) {
+            if (reservation.getCustomerName().equalsIgnoreCase(name.trim())) {
+                results.add(reservation);
             }
         }
         return results;
     }
 
     public Scene getScene() {
-        return new Scene(flowPane, SceneSize.width, SceneSize.height);
+        Scene scene=new Scene(flowPane, SceneSize.width, SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

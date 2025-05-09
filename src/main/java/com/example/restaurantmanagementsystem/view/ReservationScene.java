@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.view.component.CardComponent.Card;
 
 public class ReservationScene {
@@ -45,6 +47,8 @@ public class ReservationScene {
     }
 
     public Scene getScene() {
-        return new Scene(root, SceneSize.width,SceneSize.height);
+        Scene scene=new Scene(root, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

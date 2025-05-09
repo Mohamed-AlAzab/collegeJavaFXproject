@@ -8,6 +8,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.view.component.CardComponent.Card;
 
 public class MenuScene {
@@ -34,18 +36,14 @@ public class MenuScene {
     }
 
     void inItAction(){
-        AddOrderCard.setOnMouseClicked((e)->{
-            stage.setScene((new MakeOrderScene(stage)).getScene());
-        });
-        cancelOrderCard.setOnMouseClicked((e)->{
-            stage.setScene((new CancelOrderScene(stage)).getScene());
-        });
-        backCard.setOnMouseClicked(e->{
-            stage.setScene(new MainScene(stage).getScene());
-        });
+        AddOrderCard.setOnMouseClicked((e)->{stage.setScene((new MakeOrderScene(stage)).getScene());});
+        cancelOrderCard.setOnMouseClicked((e)->{stage.setScene((new CancelOrderScene(stage)).getScene());});
+        backCard.setOnMouseClicked(e->{stage.setScene(new MainScene(stage).getScene());});
     }
 
     Scene getScene(){
-        return new Scene (cards, SceneSize.width,SceneSize.height);
+        Scene scene=new Scene (cards, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

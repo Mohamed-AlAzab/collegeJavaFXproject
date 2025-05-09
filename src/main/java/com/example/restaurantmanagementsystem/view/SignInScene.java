@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.controller.UserController.login;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -89,6 +91,8 @@ public class SignInScene {
     }
 
     public Scene getScene () {
-        return new Scene(gridPane, SceneSize.width,SceneSize.height);
+        Scene scene=new Scene(gridPane, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

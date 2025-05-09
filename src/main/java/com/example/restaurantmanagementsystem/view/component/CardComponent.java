@@ -7,7 +7,6 @@ import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.io.File;
 
@@ -19,7 +18,6 @@ public class CardComponent {
         if (file.exists()) {
             image = new Image(file.toURI().toString());
         } else {
-            // Fallback to URL (or resource)
             image = new Image(imagePathOrUrl);
         }
 
@@ -28,18 +26,16 @@ public class CardComponent {
         icon.setFitHeight(50);
 
         Label label = new Label(labelText);
+        label.getStyleClass().add("card-label");
 
         VBox content = new VBox(10, icon, label);
         content.setAlignment(Pos.CENTER);
-        content.setPadding(new Insets(10));
-        content.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, new CornerRadii(10), Insets.EMPTY)));
+        content.getStyleClass().add("card-content");
 
         StackPane card = new StackPane(content);
         card.setMaxSize(250, 300);
-        card.setMinSize(250, 300);
         card.setPrefSize(250, 300);
-        card.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(12), Insets.EMPTY)));
-        card.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, new CornerRadii(12), BorderWidths.DEFAULT)));
+        card.getStyleClass().add("card");
 
         return card;
     }
@@ -57,25 +53,25 @@ public class CardComponent {
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(90);
         imageView.setPreserveRatio(true);
+        imageView.getStyleClass().add("food-image");
 
         Label nameLabel = new Label(foodName);
-        nameLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        nameLabel.getStyleClass().add("food-name");
 
         Label priceLabel = new Label(price);
-        priceLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+        priceLabel.getStyleClass().add("food-price");
 
         Label descLabel = new Label(description);
         descLabel.setWrapText(true);
-        descLabel.setStyle("-fx-font-size: 12px;");
+        descLabel.getStyleClass().add("food-desc");
 
         quantitySpinner.setMaxWidth(Double.MAX_VALUE);
+        quantitySpinner.getStyleClass().add("food-quantity-spinner");
 
         VBox content = new VBox(10.0, imageView, nameLabel, priceLabel, descLabel, quantitySpinner);
         content.setAlignment(Pos.CENTER);
         content.setPadding(new Insets(12));
-        content.setPrefSize(220, 280);
-        content.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(10), Insets.EMPTY)));
-        content.setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderWidths.DEFAULT)));
+        content.getStyleClass().add("food-card");
 
         return content;
     }

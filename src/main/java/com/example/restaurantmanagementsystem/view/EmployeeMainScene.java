@@ -15,6 +15,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.controller.EmployeeController.getEmail;
 import static com.example.restaurantmanagementsystem.controller.EmployeeController.getUserID;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
@@ -50,29 +52,21 @@ public class EmployeeMainScene extends Application {
         table.setItems(employees);
 
         Button addButton = new Button("Add Employee");
-        addButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
-        addButton.setPrefWidth(120);
-        addButton.setPrefHeight(40);
+        addButton.setPrefWidth(150);
 
         Button deleteButton = new Button("Delete Employee");
-        deleteButton.setStyle("-fx-background-color: #F44336; -fx-text-fill: white;");
-        deleteButton.setPrefWidth(120);
-        deleteButton.setPrefHeight(40);
+        deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+        deleteButton.setPrefWidth(150);
 
         Button updateButton = new Button("Update Employee");
-        updateButton.setStyle("-fx-background-color: #FF9800; -fx-text-fill: white;");
-        updateButton.setPrefWidth(120);
-        updateButton.setPrefHeight(40);
+        updateButton.setPrefWidth(150);
 
         Button undoButton = new Button("Undo");
-        undoButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-        undoButton.setPrefWidth(120);
-        undoButton.setPrefHeight(40);
+        undoButton.setPrefWidth(150);
 
-        VBox buttonBox = new VBox(10, addButton, deleteButton, updateButton, undoButton);
+        VBox buttonBox = new VBox(10, addButton, updateButton, undoButton, deleteButton);
         buttonBox.setAlignment(Pos.CENTER_LEFT);
         buttonBox.setPadding(new Insets(10));
-        buttonBox.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-width: 1px;");
 
         StackPane tablePane = new StackPane(table);
         tablePane.setPadding(new Insets(10));
@@ -110,6 +104,7 @@ public class EmployeeMainScene extends Application {
                 dialog.showAndWait().ifPresent(employee -> {
                     manager.updateEmployee(employee, getEmail(selected.getUserId()));
                     employees.setAll(manager.fetchAllEmployees());
+                    showAlert(Alert.AlertType.INFORMATION, "Success!", "Updated Success");
                 });
             } else {
                 showAlert(Alert.AlertType.INFORMATION, "No Selection","Please select an employee to upgrade.");
@@ -124,6 +119,7 @@ public class EmployeeMainScene extends Application {
         Scene scene = new Scene(root, SceneSize.width, SceneSize.height);
         primaryStage.setTitle("Employee Management System");
         primaryStage.setScene(scene);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
         primaryStage.setResizable(true);
         primaryStage.show();
     }
@@ -322,7 +318,7 @@ public class EmployeeMainScene extends Application {
         okButton.setOnAction(event -> {
             try {
                 if(getUserID(emailField.getText()) == null){
-                    showAlert(Alert.AlertType.ERROR, "Invalid", "User Not found");
+                    showAlert(Alert.AlertType.ERROR, "Invalid", "Email is empty");
                     return;
                 }
                 int userId = getUserID(emailField.getText());
@@ -422,6 +418,27 @@ public class EmployeeMainScene extends Application {
             if (button == okButtonType) return null;
             return null;
         });
+
+        dialog.getDialogPane().getStyleClass().add("employee-dialog");
+
+        emailField.getStyleClass().add("text-field");
+        nameField.getStyleClass().add("text-field");
+        roleCombo.getStyleClass().add("combo-box");
+
+        salaryField.getStyleClass().add("number-field");
+        discountField.getStyleClass().add("number-field");
+        bonusField.getStyleClass().add("number-field");
+        hoursField.getStyleClass().add("number-field");
+        rateField.getStyleClass().add("number-field");
+        tipsField.getStyleClass().add("number-field");
+        ordersField.getStyleClass().add("number-field");
+        payPerOrderField.getStyleClass().add("number-field");
+
+        content.getStyleClass().add("dialog-content");
+
+        dialog.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm()
+        );
         return dialog;
     }
 
@@ -662,7 +679,7 @@ public class EmployeeMainScene extends Application {
         okButton.setOnAction(event -> {
             try {
                 if(getUserID(emailField.getText()) == null){
-                    showAlert(Alert.AlertType.ERROR, "Invalid", "User Not found");
+                    showAlert(Alert.AlertType.ERROR, "Invalid", "Email is empty");
                     return;
                 }
                 int userId = getUserID(emailField.getText());
@@ -764,6 +781,26 @@ public class EmployeeMainScene extends Application {
             if (button == okButtonType) return null;
             return null;
         });
+        dialog.getDialogPane().getStyleClass().add("employee-dialog");
+
+        emailField.getStyleClass().add("text-field");
+        nameField.getStyleClass().add("text-field");
+        roleCombo.getStyleClass().add("combo-box");
+
+        salaryField.getStyleClass().add("number-field");
+        discountField.getStyleClass().add("number-field");
+        bonusField.getStyleClass().add("number-field");
+        hoursField.getStyleClass().add("number-field");
+        rateField.getStyleClass().add("number-field");
+        tipsField.getStyleClass().add("number-field");
+        ordersField.getStyleClass().add("number-field");
+        payPerOrderField.getStyleClass().add("number-field");
+
+        content.getStyleClass().add("dialog-content");
+
+        dialog.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm()
+        );
 
         return dialog;
     }

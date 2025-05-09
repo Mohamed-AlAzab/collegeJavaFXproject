@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -152,13 +153,6 @@ public class AdminMenuScene extends Application {
             System.out.println(e.toString());
         }
 
-        addItemButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        AddText.setStyle("-fx-font: normal bold 20px 'solid'");
-        updateNameButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        updatePriceButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        updateDescriptionButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
-        updateAllButton.setStyle("-fx-background-color: orange; -fx-text-fill: black;");
-        UpdateText.setStyle("-fx-font: normal bold 20px 'solid'");
         DeleteItemButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         DeleteText.setStyle("-fx-font: normal bold 20px 'solid'");
 
@@ -354,6 +348,7 @@ public class AdminMenuScene extends Application {
         HBox root = new HBox(10, v,rr, vTable);
         root.setPadding(new Insets(20));
         Scene scene = new Scene(root, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
         stage.setTitle("Menu Management");
         stage.setScene(scene);
         stage.show();
@@ -400,7 +395,6 @@ public class AdminMenuScene extends Application {
         }
         pst.close();
         conn.close();
-        // function make the array list to normal array make sort or make search
         table.getItems().setAll(data);
     }
 

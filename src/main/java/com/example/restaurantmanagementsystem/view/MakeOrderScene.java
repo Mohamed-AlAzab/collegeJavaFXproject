@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.example.restaurantmanagementsystem.controller.MenuController.fetchAllItem;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
@@ -77,5 +78,9 @@ public class MakeOrderScene {
         backButton.setOnAction(e -> stage.setScene(new MenuScene(stage).getScene()));
     }
 
-    public Scene getScene() {return new Scene(layout, SceneSize.width, SceneSize.height);}
+    public Scene getScene() {
+        Scene scene=new Scene(layout, SceneSize.width, SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
+    }
 }

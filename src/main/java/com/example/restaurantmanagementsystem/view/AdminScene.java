@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
+import java.util.Objects;
 
 import static com.example.restaurantmanagementsystem.view.component.CardComponent.Card;
 
@@ -76,7 +77,9 @@ public class AdminScene {
     }
 
     public Scene getScene() {
-        return new Scene(root, SceneSize.width,SceneSize.height);
+        Scene scene=new Scene(root, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }
 // database username: restaurant

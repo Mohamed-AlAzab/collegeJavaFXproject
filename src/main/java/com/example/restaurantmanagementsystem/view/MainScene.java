@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.view.component.CardComponent.Card;
 
 public class MainScene {
@@ -28,23 +30,17 @@ public class MainScene {
         initActions();
     }
 
-    public void initControls() {
-        cardRow.setAlignment(Pos.CENTER);
-    }
+    public void initControls() { cardRow.setAlignment(Pos.CENTER); }
 
     public void initActions() {
-        reservationCard.setOnMouseClicked((e) ->{
-            stage.setScene((new ReservationScene(stage)).getScene());
-        });
-        menuIconCard.setOnMouseClicked((e) ->{
-            stage.setScene((new MenuScene(stage)).getScene());
-        });
-        tempAdminCard.setOnMouseClicked((e) ->{
-            stage.setScene((new SignInScene(stage)).getScene());
-        });
+        reservationCard.setOnMouseClicked((e) ->{ stage.setScene((new ReservationScene(stage)).getScene());});
+        menuIconCard.setOnMouseClicked((e) ->{ stage.setScene((new MenuScene(stage)).getScene()); });
+        tempAdminCard.setOnMouseClicked((e) ->{ stage.setScene((new SignInScene(stage)).getScene()); });
     }
 
     public Scene getScene() {
-        return new Scene(root, SceneSize.width,SceneSize.height);
+        Scene scene=new Scene(root, SceneSize.width,SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

@@ -10,6 +10,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 import static com.example.restaurantmanagementsystem.controller.UserController.register;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
@@ -22,7 +24,7 @@ public class SignUpScene {
     PasswordField confirmPasswordField = new PasswordField();
 
     Button signupButton = new Button("Sign Up");
-    Button backbutton=new Button("Back");
+    Button backButton = new Button("Back");
 
     Text first = new Text("Already have an account? ");
     Text loginButton = new Text("Log in");
@@ -50,9 +52,9 @@ public class SignUpScene {
         gridPane.add(confirmPasswordField, 0, 4);
         gridPane.add(textFlow, 0, 5);
         gridPane.add(signupButton, 0, 6);
-        gridPane.add(backbutton,0,7);
+        gridPane.add(backButton,0,7);
         signupButton.setMaxWidth(Double.MAX_VALUE);
-        backbutton.setMaxWidth(Double.MAX_VALUE);
+        backButton.setMaxWidth(Double.MAX_VALUE);
 
         gridPane.setVgap(10);
         gridPane.setHgap(10);
@@ -112,17 +114,19 @@ public class SignUpScene {
         loginButton.setOnMouseClicked(e -> {
             stage.setScene(new SignInScene(stage).getScene());
         });
-        backbutton.setOnAction(e->{
+        backButton.setOnAction(e->{
             stage.setScene(new MainScene(stage).getScene());
         });
     }
 
     public static boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z][A-Za-z0-9]*\\.[A-Za-z]+$";
         return email.matches(emailRegex);
     }
 
     public Scene getScene () {
-        return new Scene(gridPane, SceneSize.width, SceneSize.height);
+        Scene scene=new Scene(gridPane, SceneSize.width, SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

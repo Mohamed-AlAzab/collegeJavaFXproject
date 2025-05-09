@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class AccountingManagementScene {
 
@@ -118,6 +119,8 @@ public class AccountingManagementScene {
     }
 
     public Scene getScene() {
-        return new Scene(layout, SceneSize.width, SceneSize.height);
+        Scene scene = new Scene(layout, SceneSize.width, SceneSize.height);
+        scene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());
+        return scene;
     }
 }

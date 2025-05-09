@@ -4,10 +4,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class App extends Application {
     public void start(Stage stage) {
         Scene mainScene = new MainScene(stage).getScene();
-        stage.setTitle("Restaurant");
+        mainScene.getStylesheets().add(Objects.requireNonNull(App.class.getResource("/com/example/restaurantmanagementsystem/Style.css")).toExternalForm());        stage.setTitle("Restaurant");
         stage.setMaximized(false);
         stage.setScene(mainScene);
         stage.show();
