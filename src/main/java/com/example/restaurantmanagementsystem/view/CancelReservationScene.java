@@ -21,7 +21,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class CancelScene {
+import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
+
+public class CancelReservationScene {
     Stage stage;
     Connection conn = null;
     PreparedStatement pst = null;
@@ -39,16 +41,13 @@ public class CancelScene {
     TextField tableIdTextField = new TextField();
     Button cancelButton = new Button("Cancel");
     GridPane root2 = new GridPane();
-    Alert a1=new Alert(Alert.AlertType.ERROR, "Enter Name");
-    Alert a2= new Alert(Alert.AlertType.ERROR, "Enter TableID");
-    Alert a3= new Alert(Alert.AlertType.CONFIRMATION, "Reservation Canceled");
-    Alert a4= new Alert(Alert.AlertType.ERROR, "Something went wrong");
-    GridPane root= new GridPane();
-    VBox v1= new VBox(root,root2);
-    VBox v2 = new VBox(table);
-    FlowPane f= new FlowPane(v1, v2);
 
-    public CancelScene(Stage stage) {
+    GridPane root= new GridPane();
+    VBox v1 = new VBox(root, root2);
+    VBox v2 = new VBox(table);
+    FlowPane flowPane = new FlowPane(v1, v2);
+
+    public CancelReservationScene(Stage stage) {
         this.stage = stage;
         this.initControls();
         this.initActions();
@@ -83,35 +82,23 @@ public class CancelScene {
         c1.setPrefWidth(150);
         c2.setPrefWidth(150);
         c3.setPrefWidth(150);
-        f.setAlignment(Pos.CENTER);
-        f.setVgap(10);
-        f.setHgap(10);
-        f.setPadding(new Insets(20));
+        flowPane.setAlignment(Pos.CENTER);
+        flowPane.setVgap(10);
+        flowPane.setHgap(10);
+        flowPane.setPadding(new Insets(20));
     }
 
     public void initActions() {
-        searchButton.setOnAction((e) -> {
-            if (nameTextField.getText().isEmpty()) {
-                a1.showAndWait();
-            } else {
+        searchButton.setOnAction(e -> {
+            if (nameTextField.getText().isEmpty()) { showAlert(Alert.AlertType.ERROR, "Enter Name","Name field is empty"); }
+            else {
                 try {
-                    conn = DB.dbConnection();
+                    if (data == null) { loadAllReservations(); }
                     String name = nameTextField.getText();
-                    String sql = "SELECT * FROM RESERVATION WHERE CUSTOMERNAME = ?";
-                    pst = conn.prepareStatement(sql);
-                    pst.setString(1, name);
-                    res = pst.executeQuery();
-                    data = new ArrayList<>();
-                    while(res.next()) {
-                        data.add(new Reservation(
-                            res.getInt(1),
-                            res.getString(2),
-                            res.getDate(3).toLocalDate()
-                        ));
-                    }
-                    pst.close();
-                    conn.close();
-                    table.getItems().setAll(data);
+                    ArrayList<Reservation> result = linearSearchByName(name);
+
+                    if (result.isEmpty()) { showAlert(Alert.AlertType.INFORMATION, "Not found", "No Reservations Found"); }
+                    table.getItems().setAll(result);
                 } catch (SQLException ex) {
                     System.out.println(ex.toString());
                 }
@@ -122,24 +109,49 @@ public class CancelScene {
         });
         cancelButton.setOnAction((e) -> {
             if (tableIdTextField.getText().isEmpty()) {
-                a2.showAndWait();
+                showAlert(Alert.AlertType.ERROR, "Enter TableID","Table id field is empty");
             } else {
                 int[] arr;
                 int id = Integer.parseInt(tableIdTextField.getText());
                 arr = manager.cancelReservation(id);
                 if (arr[0] == 1 && arr[1] == 1) {
-                    a3.showAndWait();
+                    showAlert(Alert.AlertType.CONFIRMATION, "Reservation Canceled","Reservation Canceled");
                     stage.setScene(new MainScene(stage).getScene());
-                } else {
-                    a4.showAndWait();
-                }
-
+                } else { showAlert(Alert.AlertType.ERROR, "Wrong","Something went wrong"); }
             }
-
         });
     }
 
+    private void loadAllReservations() throws SQLException {
+        conn = DB.dbConnection();
+        String sql = "SELECT * FROM RESERVATION";
+        pst = conn.prepareStatement(sql);
+        res = pst.executeQuery();
+
+        data = new ArrayList<>();
+        while (res.next()) {
+            data.add(new Reservation(
+                    res.getInt(1),
+                    res.getString(2),
+                    res.getDate(3).toLocalDate()
+            ));
+        }
+
+        pst.close();
+        conn.close();
+    }
+
+    private ArrayList<Reservation> linearSearchByName(String name) {
+        ArrayList<Reservation> results = new ArrayList<>();
+        for (Reservation r : data) {
+            if (r.getCustomerName().equalsIgnoreCase(name.trim())) {
+                results.add(r);
+            }
+        }
+        return results;
+    }
+
     public Scene getScene() {
-        return new Scene(f, SceneSize.width,SceneSize.height);
+        return new Scene(flowPane, SceneSize.width, SceneSize.height);
     }
 }

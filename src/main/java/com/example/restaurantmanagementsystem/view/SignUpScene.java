@@ -4,6 +4,7 @@ import com.example.restaurantmanagementsystem.util.SceneSize;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -57,6 +58,31 @@ public class SignUpScene {
         gridPane.setHgap(10);
         gridPane.setAlignment(Pos.CENTER);
         loginButton.setFill(javafx.scene.paint.Color.BLUE);
+
+        userTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                emailTextField.requestFocus();
+                event.consume();
+            }
+        });
+        emailTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                passwordField.requestFocus();
+                event.consume();
+            }
+        });
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                confirmPasswordField.requestFocus();
+                event.consume();
+            }
+        });
+        confirmPasswordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                signupButton.fire();
+                event.consume();
+            }
+        });
     }
 
     public void initActions () {

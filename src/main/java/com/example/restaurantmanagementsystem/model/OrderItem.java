@@ -1,5 +1,9 @@
 package com.example.restaurantmanagementsystem.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class OrderItem {
     private int id;
     private int orderId;
@@ -43,5 +47,19 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public static void addOrderItem(int orderId, int menuId, int quantity) {
+        String sql = "INSERT INTO order_items (order_id, menu_id, quantity) VALUES (?, ?, ?)";
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, orderId);
+            pst.setInt(2, menuId);
+            pst.setInt(3, quantity);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            throw new RuntimeException("Failed to add order item: " + e.getMessage(), e);
+        }
     }
 }

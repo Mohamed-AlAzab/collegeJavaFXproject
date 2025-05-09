@@ -29,11 +29,11 @@ public class CancelOrderScene {
 
     public CancelOrderScene(Stage stage) {
         this.stage = stage;
-        createScene();
+        initControls();
         initActions();
     }
 
-    public void createScene() {
+    public void initControls() {
         gridPane.setPadding(new Insets(20));
         gridPane.setHgap(10);
         gridPane.setVgap(15);
@@ -56,6 +56,24 @@ public class CancelOrderScene {
         gridPane.add(backButton, 0, 3, 2, 1);
     }
 
+    public void initActions () {
+        cancelButton.setOnAction(e -> {
+            String orderId = orderIdField.getText().trim();
+            if (!orderId.matches("\\d+")) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric Order ID.");
+                return;
+            }
+            try {
+                cancelOrderById(Integer.parseInt(orderId));
+            } catch (SQLException ex) {
+                System.out.println(ex.toString());
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel order.");
+            }
+        });
+        backButton.setOnAction(e->{
+            stage.setScene(new MenuScene(stage).getScene());
+        });
+    }
 
     private void cancelOrderById(int orderId) throws SQLException {
         String checkSQL = "SELECT id FROM orders WHERE id = ?";
@@ -92,25 +110,6 @@ public class CancelOrderScene {
             System.out.println(ex.toString());
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel order.");
         }
-    }
-
-    public void initActions () {
-        cancelButton.setOnAction(e -> {
-            String orderId = orderIdField.getText().trim();
-            if (!orderId.matches("\\d+")) {
-                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid numeric Order ID.");
-                return;
-            }
-            try {
-                cancelOrderById(Integer.parseInt(orderId));
-            } catch (SQLException ex) {
-                System.out.println(ex.toString());
-                showAlert(Alert.AlertType.ERROR, "Error", "Failed to cancel order.");
-            }
-        });
-        backButton.setOnAction(e->{
-            stage.setScene(new UserMenuMainScene(stage).getScene());
-        });
     }
 
     public Scene getScene() { return new Scene(gridPane, SceneSize.width, SceneSize.height); }

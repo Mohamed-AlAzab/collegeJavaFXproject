@@ -68,7 +68,7 @@ public class User {
     }
 
     public static boolean loginUser(String email, String password) {
-        String sql = "SELECT * FROM USERS WHERE NAME = ? AND PASSWORD = ?";
+        String sql = "SELECT * FROM USERS WHERE EMAIL = ? AND PASSWORD = ?";
         try (Connection conn = DB.dbConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -103,7 +103,7 @@ public class User {
     }
 
     public static int staff(String email){
-        String sql = "SELECT STAFF FROM USERS WHERE NAME = ?";
+        String sql = "SELECT STAFF FROM USERS WHERE EMAIL = ?";
         int staffValue = 0;
         try (Connection conn=DB.dbConnection();
              PreparedStatement pst=conn.prepareStatement(sql)) {

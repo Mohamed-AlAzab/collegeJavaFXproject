@@ -37,7 +37,7 @@ public class MainScene {
             stage.setScene((new ReservationScene(stage)).getScene());
         });
         menuIconCard.setOnMouseClicked((e) ->{
-            stage.setScene((new UserMenuMainScene(stage)).getScene());
+            stage.setScene((new MenuScene(stage)).getScene());
         });
         tempAdminCard.setOnMouseClicked((e) ->{
             stage.setScene((new SignInScene(stage)).getScene());

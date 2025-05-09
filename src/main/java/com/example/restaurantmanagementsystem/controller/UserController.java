@@ -8,6 +8,7 @@ import com.example.restaurantmanagementsystem.view.SignInScene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import static com.example.restaurantmanagementsystem.controller.EmployeeController.getEmployeeID;
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
 
@@ -31,7 +32,7 @@ public class UserController {
             if(User.staff(email) == 2){
                 stage.setScene(new AdminScene(stage).getScene());
             } else if (User.staff(email) == 1) {
-                stage.setScene(new EmployeeScene(stage).getScene());
+                stage.setScene(new EmployeeScene(stage, getEmployeeID(email)).getScene());
             } else {
                 stage.setScene(new MainScene(stage).getScene());
             }

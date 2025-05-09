@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.text.Text;
@@ -17,7 +18,7 @@ import static com.example.restaurantmanagementsystem.view.component.AlertCompone
 public class SignInScene {
     Label title = new Label("Log In");
 
-    TextField usernameTextField = new TextField();
+    TextField emailTextField = new TextField();
     PasswordField passwordField = new PasswordField();
 
     Text first = new Text("Don't have an account? ");
@@ -37,11 +38,11 @@ public class SignInScene {
     }
 
     public void initControls () {
-        usernameTextField.setPromptText("Username");
+        emailTextField.setPromptText("Username");
         passwordField.setPromptText("Password");
 
         gridPane.add(title, 0,0,2,1);
-        gridPane.add(usernameTextField, 0, 1);
+        gridPane.add(emailTextField, 0, 1);
         gridPane.add(passwordField, 0, 2);
         gridPane.add(textFlow, 0, 3);
         gridPane.add(loginButton, 0, 4);
@@ -52,19 +53,32 @@ public class SignInScene {
         gridPane.setHgap(10);
         gridPane.setAlignment(Pos.CENTER);
         signUpButton.setFill(javafx.scene.paint.Color.BLUE);
+
+        emailTextField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                passwordField.requestFocus();
+                event.consume();
+            }
+        });
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                loginButton.fire();
+                event.consume();
+            }
+        });
     }
 
     public void initActions () {
         loginButton.setOnAction(e -> {
-            if (usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+            if (emailTextField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR,"", "Enter all the fields");
                 return;
             }
-            String username = usernameTextField.getText();
+            String email = emailTextField.getText();
             String password = passwordField.getText();
             // String salt = PasswordUtil.salt;
             // String hashedPassword = PasswordUtil.hashPassword(password, salt);
-            login(username, password, stage);
+            login(email, password, stage);
         });
         backButton.setOnAction(e -> {
             stage.setScene(new MainScene(stage).getScene());

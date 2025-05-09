@@ -1,9 +1,6 @@
 package com.example.restaurantmanagementsystem.model;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Order {
     private int id;
@@ -40,12 +37,30 @@ public class Order {
         }
     }
 
-    public static boolean deleteOrder(int id) throws SQLException {
-        String sql = "DELETE FROM ORDERS WHERE ORDER_ID = ?";
+    public static boolean deleteOrder(int orderId) throws SQLException {
+        String sql = "DELETE FROM ORDERS WHERE ID = ?";
         try (Connection conn = DB.dbConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setInt(1, orderId);
             return pst.executeUpdate() == 1;
         }
+    }
+
+    public static Integer createOrder() {
+        String sql = "INSERT INTO ORDERS (ID, TIME) VALUES (order_seq.NEXTVAL, CURRENT_TIMESTAMP)";
+        try (Connection conn = DB.dbConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.executeUpdate();
+
+            try (Statement st = conn.createStatement();
+                 ResultSet rs = st.executeQuery("SELECT order_seq.CURRVAL FROM dual")) {
+                if (rs.next()) {
+                    return rs.getInt(1);  // Return the generated ID
+                }
+            }
+        } catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
+        return null;
     }
 }

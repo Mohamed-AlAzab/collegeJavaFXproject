@@ -48,7 +48,7 @@ public class AdminScene {
     public void initActions() {
         menuCard.setOnMouseClicked(event -> {
             try {
-                new MenuScene().start(new Stage()); // Launches in a new window
+                new AdminMenuScene().start(new Stage()); // Launches in a new window
             } catch (Exception e) {
                 System.out.println(e.toString());
             }

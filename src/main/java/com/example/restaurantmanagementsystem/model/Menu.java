@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 import static com.example.restaurantmanagementsystem.view.component.AlertComponent.showAlert;
 
-// TODO: Make the menu have menu item (separate it).
-
 public class Menu {
     private int id;
     private String name;
@@ -57,8 +55,6 @@ public class Menu {
         this.description = desc;
     }
 
-    // abstract public void displayDetails();
-
     public static boolean addItem(int id, String name, double price, String description) {
         String sql = "INSERT INTO menu (id, name, price, description) VALUES (?, ?, ?, ?)";
 
@@ -92,10 +88,10 @@ public class Menu {
         }
     }
 
-    public static ArrayList<Menu>fetchAllData(){
+    public static ArrayList<Menu> fetchAllItem(){
         Connection connection=DB.dbConnection();
         String sql="select * from MENU";
-        ArrayList<Menu>data=new ArrayList<>();
+        ArrayList<Menu> data = new ArrayList<>();
         try{
             PreparedStatement pst=connection.prepareStatement(sql);
             ResultSet res= pst.executeQuery();
