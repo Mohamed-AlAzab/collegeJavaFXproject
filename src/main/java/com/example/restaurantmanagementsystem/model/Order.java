@@ -55,7 +55,7 @@ public class Order {
             try (Statement st = conn.createStatement();
                  ResultSet rs = st.executeQuery("SELECT order_seq.CURRVAL FROM dual")) {
                 if (rs.next()) {
-                    return rs.getInt(1);  // Return the generated ID
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException ex){

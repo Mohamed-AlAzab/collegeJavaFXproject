@@ -28,7 +28,7 @@ public class OrderController {
             }
 
             if (anyItemAdded) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "Order placed successfully!\n Order # " + orderId);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Order placed successfully!\nOrder # " + orderId);
             } else {
                 try {
                     Order.deleteOrder(orderId);
